@@ -35,7 +35,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 1. 헤더검증 후 헤더가 있다면 토큰 검증 후 임시 세션 생성
         if (isHeaderVerify(request, response)) {
             // 토큰 파싱하기 (Bearer 없애기)
-            String token = request.getHeader(JwtProperties.HEADER_STRING)
+            String token = request.getHeader(JwtProperties.HEADER_KEY)
                     .replace(JwtProperties.TOKEN_PREFIX, "");
             // 토큰 검증
             LoginUser loginUser = JwtProcess.verify(token);
@@ -51,7 +51,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private boolean isHeaderVerify(HttpServletRequest request, HttpServletResponse response) {
-        String header = request.getHeader(JwtProperties.HEADER_STRING);
+        String header = request.getHeader(JwtProperties.HEADER_KEY);
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
             return false;
         } else {
