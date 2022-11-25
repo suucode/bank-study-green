@@ -12,7 +12,7 @@ public class JwtProcessTest {
     @Test
     public void create_test() {
         // given
-        User user = User.builder().id(1L).role(UserEnum.CUSTOMER).build();
+        User user = User.builder().id(1L).username("ssar").role(UserEnum.CUSTOMER).build();
         LoginUser loginUser = new LoginUser(user);
         String token = JwtProcess.create(loginUser);
         System.out.println(token);

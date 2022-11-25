@@ -19,17 +19,21 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import shop.mtcoding.bank.config.auth.LoginUser;
 import shop.mtcoding.bank.config.dummy.DummyEntity;
+import shop.mtcoding.bank.config.enums.UserEnum;
+import shop.mtcoding.bank.config.jwt.JwtProcess;
+import shop.mtcoding.bank.config.jwt.JwtProperties;
 import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
-import shop.mtcoding.bank.dto.UserReqDto.JoinReqDto;
+import shop.mtcoding.bank.dto.AccountReqDto.AccountSaveReqDto;
 import shop.mtcoding.bank.dto.UserReqDto.LoginReqDto;
 
 @Sql("classpath:db/truncate.sql") // 롤백 대신 사용 (auto_increment 초기화 + 데이터 비우기)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-public class UserApiControllerTest extends DummyEntity {
+public class AccountApiControllerTest extends DummyEntity {
 
     private static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";
     private static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=utf-8";
@@ -49,49 +53,31 @@ public class UserApiControllerTest extends DummyEntity {
     }
 
     @Test
-    public void join_test() throws Exception {
+    public void save_test() throws Exception {
         // given
-        JoinReqDto joinReqDto = new JoinReqDto();
-        joinReqDto.setUsername("cos");
-        joinReqDto.setPassword("cos");
-        joinReqDto.setEmail("cos@nate.com");
-        String requestBody = om.writeValueAsString(joinReqDto);
+        AccountSaveReqDto accountSaveReqDto = new AccountSaveReqDto();
+        accountSaveReqDto.setNumber(1111L);
+        accountSaveReqDto.setPassword("1234");
+        accountSaveReqDto.setOwnerName("쌀");
+        String requestBody = om.writeValueAsString(accountSaveReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        User user = User.builder().id(1L).username("ssar").role(UserEnum.CUSTOMER).build();
+        LoginUser loginUser = new LoginUser(user);
+        String token = JwtProcess.create(loginUser);
+        String jwtToken = JwtProperties.TOKEN_PREFIX + token;
+        System.out.println("테스트 : " + jwtToken);
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/api/join").content(requestBody)
-                        .contentType(APPLICATION_JSON_UTF8));
+                .perform(post("/api/account").content(requestBody)
+                        .contentType(APPLICATION_JSON_UTF8).header(JwtProperties.HEADER_STRING, jwtToken));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("디버그 : " + responseBody);
+        System.out.println("테스트 : " + responseBody);
 
         // then
         resultActions.andExpect(status().isCreated());
-        resultActions.andExpect(jsonPath("$.data.username").value("cos"));
-    }
-
-    @Test
-    public void login_test() throws Exception {
-        // given
-        LoginReqDto loginReqDto = new LoginReqDto();
-        loginReqDto.setUsername("ssar");
-        loginReqDto.setPassword("1234");
-        String requestBody = om.writeValueAsString(loginReqDto);
-        System.out.println(requestBody);
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/login").content(requestBody)
-                        .contentType(APPLICATION_JSON_UTF8));
-        String token = resultActions.andReturn().getResponse().getHeader("Authorization");
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println(token);
-        System.out.println(responseBody);
-
-        // then
-        resultActions.andExpect(status().isOk());
-        assertNotNull(token);
-        assertTrue(token.startsWith("Bearer"));
-        resultActions.andExpect(jsonPath("$.data.username").value("ssar"));
+        resultActions.andExpect(jsonPath("$.data.number").value(1111L));
     }
 
     public void dataInsert() {
