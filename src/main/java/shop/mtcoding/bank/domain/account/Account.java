@@ -35,7 +35,7 @@ public class Account extends AudingTime {
     private String password;
 
     @Column(nullable = false)
-    private Long balance; // 잔액
+    private Long balance; // 잔액 (default = 1000원 ∵출금테스트를 위해서)
 
     // 커멜케이스는 DB에 언더스코어로 생성된다.
     @Column(nullable = false)

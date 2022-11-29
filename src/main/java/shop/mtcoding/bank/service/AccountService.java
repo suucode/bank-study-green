@@ -23,8 +23,10 @@ public class AccountService {
 
     @Transactional
     public AccountSaveRespDto 계좌생성(AccountSaveReqDto accountSaveReqDto, Long userId) {
+        // Account account = accountSaveReqDto.toEntity(user);
+        // Account accountPS = accountRepository.save(account);
         User userPS = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomApiException("해당 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new CustomApiException("탈퇴한 유저로 계좌를 생성할 수 없습니다.", HttpStatus.FORBIDDEN));
         Account accountPS = accountRepository.save(accountSaveReqDto.toEntity(userPS));
         return new AccountSaveRespDto(accountPS);
     }

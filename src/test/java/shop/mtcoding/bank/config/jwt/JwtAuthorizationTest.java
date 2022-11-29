@@ -28,7 +28,7 @@ public class JwtAuthorizationTest {
     @Test
     public void authorization_success_test() throws Exception {
         // given
-        User user = User.builder().id(1L).username("ssar").role(UserEnum.CUSTOMER).build();
+        User user = User.builder().id(1L).role(UserEnum.CUSTOMER).build(); //newUser로는 id를 넣을 수 없어서 만들 수 없다
         LoginUser loginUser = new LoginUser(user);
         String jwtHeaderKey = JwtProperties.HEADER_KEY;
         String jwtToken = JwtProcess.create(loginUser);
@@ -40,16 +40,17 @@ public class JwtAuthorizationTest {
                 .perform(get("/api/user/test").header(jwtHeaderKey, jwtToken));
 
         // then
-        resultActions.andExpect(status().isNotFound());
+        resultActions.andExpect(status().isNotFound()); //404가 나오면 잘된것
     }
 
     @Test
     public void authorization_fail_test() throws Exception {
+        //given //given이 없으므로 header없이 실행하면 됨
         // when
         ResultActions resultActions = mvc
                 .perform(get("/api/user/test"));
 
         // then
-        resultActions.andExpect(status().isForbidden());
+        resultActions.andExpect(status().isForbidden()); //403이 나오면 잘된것
     }
 }

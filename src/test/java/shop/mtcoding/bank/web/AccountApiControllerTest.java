@@ -44,10 +44,12 @@ public class AccountApiControllerTest extends DummyEntity {
 
     @BeforeEach
     public void setUp() {
-        dataInsert();
+        User ssar = newUser("ssar");
+        userRepository.save(ssar);
+        // dataInsert();
     }
 
-    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION) //setupBefore이 먼저 
     @Test
     public void save_test() throws Exception {
         // given

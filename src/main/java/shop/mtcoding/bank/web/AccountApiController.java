@@ -28,9 +28,9 @@ public class AccountApiController {
     private final AccountService accountService;
 
     @PostMapping("/account")
-    public ResponseEntity<?> save(@RequestBody @Valid AccountSaveReqDto accountSaveReqDto,
+    public ResponseEntity<?> save(@RequestBody @Valid AccountSaveReqDto accountSaveReqDto, //바로 밑에 만들어뒀다가 dto로 빼내기
             BindingResult bindingResult,
-            @AuthenticationPrincipal LoginUser loginUser) {
+            @AuthenticationPrincipal LoginUser loginUser) { //security context에 있는 user detail을 가져옴
 
         AccountSaveRespDto accountSaveRespDto = accountService.계좌생성(accountSaveReqDto, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("계좌생성완료", accountSaveRespDto),
