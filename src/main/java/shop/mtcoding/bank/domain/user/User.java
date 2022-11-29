@@ -48,6 +48,7 @@ public class User extends AudingTime {
         this.password = password;
         this.fullName = fullName;
         this.email = email;
+        this.fullName = fullName;
         this.role = role;
     }
 

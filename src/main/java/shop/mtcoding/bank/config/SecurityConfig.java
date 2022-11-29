@@ -14,11 +14,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import lombok.RequiredArgsConstructor;
 import shop.mtcoding.bank.config.enums.UserEnum;
 import shop.mtcoding.bank.config.jwt.JwtAuthenticationFilter;
 import shop.mtcoding.bank.config.jwt.JwtAuthorizationFilter;
 import shop.mtcoding.bank.util.CustomResponseUtil;
 
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
 
@@ -30,7 +32,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //모든 필터 등록은 여기서!!
+    // 모든 필터 등록은 여기서!!
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -38,7 +40,7 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http.addFilter(new JwtAuthenticationFilter(authenticationManager));
             http.addFilter(new JwtAuthorizationFilter(authenticationManager));
-            http.cors(); //IoC에 등록해놓은 경우 활성화 시키는 코드
+            // http.cors(); //IoC에 등록해놓은 경우 활성화 시키는 코드
         }
     }
 

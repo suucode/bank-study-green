@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import shop.mtcoding.bank.config.exception.CustomApiException;
 import shop.mtcoding.bank.domain.account.Account;
@@ -25,7 +27,11 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
-    //본인 계좌목록보기
+    // 계좌상세보기 (Account + List<Transaction>) Transaction 구현하고 만들기
+
+    // 본인계좌삭제하기
+
+    // 본인계좌목록보기
     public void 본인_계좌목록보기(Long userId) {
         List<Account> accountListPS = accountRepository.findByActiveUserId(userId);
     }
@@ -34,9 +40,11 @@ public class AccountService {
         private UserDto user;
         private List<AccountDto> accounts;
 
+        @Setter
+        @Getter
         public class UserDto {
-            private Long id; // user
-            private String ownerName; //account 필드
+            private Long id; // user 것
+            private String ownerName; // account 필드
         }
 
         public class AccountDto {

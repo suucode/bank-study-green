@@ -14,7 +14,7 @@ public abstract class DummyEntity { //new를 못하게해버린다
         User user = User.builder()
                 .username(username)
                 .password(encPassword)
-                .fullName(username+"실명")
+                .fullName(username + "계좌주이름")
                 .email(username + "@nate.com")
                 .role(username.equals("admin") ? UserEnum.ADMIN : UserEnum.CUSTOMER)
                 .build();
@@ -23,12 +23,12 @@ public abstract class DummyEntity { //new를 못하게해버린다
 
     protected Account newAccount(Long number, User user) {
         Account account = Account.builder()
-            .number(number)
-            .password("1234")
-            .balance(1000L)
-            .user(user)
-            .isActive(true)
-            .build();
+                .number(number)
+                .password("1234")
+                .balance(1000L)
+                .user(user)
+                .isActive(true)
+                .build();
         return account;
     }
 }
