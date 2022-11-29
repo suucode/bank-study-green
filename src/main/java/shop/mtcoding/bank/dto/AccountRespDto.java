@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.user.User;
-import shop.mtcoding.bank.dto.AccountRespDto.AccountListRespDto.AccountDto;
 import shop.mtcoding.bank.util.CustomDateUtil;
 
 public class AccountRespDto {
@@ -34,7 +33,6 @@ public class AccountRespDto {
                 this.id = user.getId();
                 this.fullName = user.getFullName();
             }
-
         }
 
         @Setter
@@ -51,7 +49,6 @@ public class AccountRespDto {
             }
         }
     }
-
 
     @Setter
     @Getter
