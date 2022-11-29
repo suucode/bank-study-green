@@ -1,5 +1,7 @@
 package shop.mtcoding.bank.service;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,27 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+
+    //본인 계좌목록보기
+    public void 본인_계좌목록보기(Long userId) {
+        List<Account> accountListPS = accountRepository.findByActiveUserId(userId);
+    }
+
+    public static class AccountListRespDto {
+        private UserDto user;
+        private List<AccountDto> accounts;
+
+        public class UserDto {
+            private Long id; // user
+            private String ownerName; //account 필드
+        }
+
+        public class AccountDto {
+            private Long id;
+            private Long number;
+            private Long balance;
+        }
+    }
 
     @Transactional
     public AccountSaveRespDto 계좌생성(AccountSaveReqDto accountSaveReqDto, Long userId) {

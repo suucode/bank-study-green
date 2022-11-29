@@ -30,6 +30,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    //모든 필터 등록은 여기서!!
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -37,6 +38,7 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http.addFilter(new JwtAuthenticationFilter(authenticationManager));
             http.addFilter(new JwtAuthorizationFilter(authenticationManager));
+            http.cors(); //IoC에 등록해놓은 경우 활성화 시키는 코드
         }
     }
 
@@ -49,7 +51,7 @@ public class SecurityConfig {
         // ExcpetionTranslationFilter (인증 권한 확인 필터)
         http.exceptionHandling().authenticationEntryPoint(
                 (request, response, authException) -> {
-                    CustomResponseUtil.fail(response, "권한없음");
+                    CustomResponseUtil.forbidden(response, "권한없음");
                 });
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -75,7 +77,7 @@ public class SecurityConfig {
         configuration.setAllowCredentials(true); // 클라이언트에서 쿠키, 인증(Authorization)과 같은 헤더를 서버에서 허용해줄지 말지 설정하는 것
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); //모든 요청을 허용하겠다
+        source.registerCorsConfiguration("/api/**", configuration); //api가 붙은 모든 요청을 허용하겠다
         return source;
     }
 }
