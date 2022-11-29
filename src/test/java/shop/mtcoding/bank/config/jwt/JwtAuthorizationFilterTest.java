@@ -1,7 +1,6 @@
 package shop.mtcoding.bank.config.jwt;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -20,37 +19,35 @@ import shop.mtcoding.bank.domain.user.User;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-public class JwtAuthorizationTest {
-
+public class JwtAuthorizationFilterTest {
     @Autowired
     private MockMvc mvc;
 
     @Test
     public void authorization_success_test() throws Exception {
         // given
-        User user = User.builder().id(1L).role(UserEnum.CUSTOMER).build(); //newUser로는 id를 넣을 수 없어서 만들 수 없다
+        User user = User.builder().id(1L).role(UserEnum.CUSTOMER).build();
         LoginUser loginUser = new LoginUser(user);
-        String jwtHeaderKey = JwtProperties.HEADER_STRING;
         String jwtToken = JwtProcess.create(loginUser);
-
         System.out.println("테스트 : " + jwtToken);
 
         // when
         ResultActions resultActions = mvc
-                .perform(get("/api/user/test").header(jwtHeaderKey, jwtToken));
+                .perform(get("/api/user/test").header(JwtProperties.HEADER_STRING, jwtToken));
 
         // then
-        resultActions.andExpect(status().isNotFound()); //404가 나오면 잘된것
+        resultActions.andExpect(status().isNotFound());
     }
 
     @Test
     public void authorization_fail_test() throws Exception {
-        //given //given이 없으므로 header없이 실행하면 됨
+        // given
+
         // when
         ResultActions resultActions = mvc
                 .perform(get("/api/user/test"));
 
         // then
-        resultActions.andExpect(status().isForbidden()); //403이 나오면 잘된것
+        resultActions.andExpect(status().isForbidden());
     }
 }

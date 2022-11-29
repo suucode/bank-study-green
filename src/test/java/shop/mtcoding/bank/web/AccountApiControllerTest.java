@@ -50,6 +50,8 @@ public class AccountApiControllerTest extends DummyEntity {
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION) //setupBefore이 먼저 
+    // @WithUserDetails(value = "ssar", setupBefore =
+    // TestExecutionEvent.TEST_EXECUTION)
     @Test
     public void save_test() throws Exception {
         // given

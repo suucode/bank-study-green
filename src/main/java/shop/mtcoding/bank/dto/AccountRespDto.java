@@ -1,7 +1,6 @@
 package shop.mtcoding.bank.dto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import lombok.Getter;
 import lombok.Setter;
