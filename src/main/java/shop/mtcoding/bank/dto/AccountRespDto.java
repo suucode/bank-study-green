@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.user.User;
+import shop.mtcoding.bank.dto.AccountRespDto.AccountListRespDto.AccountDto;
 import shop.mtcoding.bank.util.CustomDateUtil;
 
 public class AccountRespDto {
@@ -20,7 +21,12 @@ public class AccountRespDto {
 
         public AccountListRespDto(List<Account> accounts) {
             this.user = new UserDto(accounts.get(0).getUser());
-            this.accounts = accounts.stream().map((account)->new AccountDto(account)).collect(Collectors.toList()); //streamApi
+            this.accounts = accounts.stream().map((account) -> new AccountDto(account)).collect(Collectors.toList()); //streamApi
+        }
+        
+        public AccountListRespDto(User user, List<Account> accounts) {
+            this.user = new UserDto(user);
+            this.accounts = accounts.stream().map((account)->new AccountDto(account)).collect(Collectors.toList());
         }
 
         @Setter

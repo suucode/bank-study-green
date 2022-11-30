@@ -49,6 +49,7 @@ public class SecurityConfig {
         log.debug("디버그 : SecurityConfig의 filterChain");
         http.headers().frameOptions().disable();
         http.csrf().disable();
+        http.cors().configurationSource(configurationSource()); //JUnit때문에 이렇게 설정
 
         // ExcpetionTranslationFilter (인증 권한 확인 필터)
         http.exceptionHandling().authenticationEntryPoint(
@@ -70,11 +71,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
+
     public CorsConfigurationSource configurationSource() { //controller 위에 @crossorigin 붙여도되는데 매번 붙이긴 귀찮으니까 전역적인 설정을 하는 것
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedHeader("*"); //헤더는 다 열어줘도 됨
-        configuration.addAllowedMethod("*"); //method를 제한 할 수는 없음.. 하나씩 해도되긴 함..!
+        configuration.addAllowedHeader("*"); //어떤 헤더를 열어줄건지 -> 근데 헤더는 다 열어줘도 됨
+        configuration.addAllowedMethod("*"); //어떤 methode를 열어줄건지 -> 근데 method를 제한 할 수는 없음.. 하나씩 해도되긴 함..!
         configuration.addAllowedOriginPattern("*"); //원래는 프론트 서버의 주소만 허용하면 됨 (웹만 해당, 폰은 주소가 계속 바뀜)
         configuration.setAllowCredentials(true); // 클라이언트에서 쿠키, 인증(Authorization)과 같은 헤더를 서버에서 허용해줄지 말지 설정하는 것
         

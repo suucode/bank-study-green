@@ -33,4 +33,12 @@ public class AccountReqDto {
                     .build();
         }
     }
+
+    @Setter
+    @Getter
+    public static class AccountDeleteReqDto {
+        private String password; //하나만 받더라도 Dto를 만들어야한다..
+
+        //private Long userId; //서비스 로직
+    }
 }
