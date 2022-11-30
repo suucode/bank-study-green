@@ -12,6 +12,7 @@ import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.account.AccountRepository;
 import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
+import shop.mtcoding.bank.dto.AccountRespDto;
 import shop.mtcoding.bank.dto.AccountReqDto.AccountDeleteReqDto;
 import shop.mtcoding.bank.dto.AccountReqDto.AccountSaveReqDto;
 import shop.mtcoding.bank.dto.AccountRespDto.AccountListRespDto;
@@ -50,7 +51,7 @@ public class AccountService {
         List<Account> accountListPS = accountRepository.findByActiveUserId(userId);
         if (accountListPS.size() == 0) {
             User userPS = userRepository.findById(userId).orElseThrow(()->new CustomApiException("사용자를 찾을 수 없습니다", HttpStatus.BAD_REQUEST));
-            return new AccountListRespDto(userPS);
+            return new AccountListRespDto(accountListPS);
         } else {
             return new AccountListRespDto(accountListPS);
         }

@@ -66,7 +66,7 @@ public class Account extends AudingTime {
 
     //계좌 패스워드 확인
     public void checkPassword(String password) {
-        if (this.password != password) {
+        if (!this.password.equals(password)) {
             throw new CustomApiException("계좌 패스워드가 틀렸습니다", HttpStatus.BAD_REQUEST);
         }
     }
